@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nomination Form Filler</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#6c5ce7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nomination">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
 :root{
   --bg:#f6f4fb; --card:#ffffff; --ink:#2a2540; --muted:#6b6585; --line:#e3def0;
@@ -127,7 +135,7 @@ label.f.invalid .combo select{border-color:var(--bad);background:var(--bad-soft)
         <button id="btnAnswers" disabled title="Upload the filled-in Missing info list (or any customer list). Answers are matched by policy no.">⬆ Upload answers</button>
         <button id="btnExportList" disabled>Save customer list (Excel)</button>
         <button id="btnAllEach" disabled>⬇ Download each PDF</button>
-        <button id="btnAllOne" class="primary" disabled>⬇ All ready forms in one PDF</button>
+        <button id="btnAllOne" class="primary" disabled>⬇ All forms in one PDF</button>
         <button id="btnClear" disabled>Clear all</button>
       </div>
     </div>
@@ -1103,6 +1111,8 @@ window.addEventListener('beforeunload', e => { if (customers.length) { e.prevent
     TEMPLATE = b64ToBytes(document.getElementById('tpl-nomination').textContent);
     render();
     $('loading').classList.add('hidden');
+    // offline support when installed as a phone app (only on the website, not the local file)
+    if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
   } catch (e) { $('loading').textContent = 'Could not start: ' + e.message; }
 })();
 </script>
